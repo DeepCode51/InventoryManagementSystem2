@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员页面</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/font-awesome.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/animate.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/bootstrap-switch.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/checkbox3.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/jquery.dataTables.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/dataTables.bootstrap.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/select2.min.css}">
+    <!-- CSS App -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/themes/flat-blue.css}">
+    <!-- Javascript Libs -->
+    <script type="text/javascript" th:src="@{/lib/js/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/Chart.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/bootstrap-switch.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/jquery.matchHeight-min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/jquery.dataTables.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/dataTables.bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/select2.full.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/ace/ace.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/ace/mode-html.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/ace/theme-github.js}"></script>
+    <!-- Javascript -->
+    <script type="text/javascript" th:src="@{/js/app.js}"></script>
+    <script type="text/javascript" th:src="@{/js/index.js}"></script>
+</head>
+<body class="flat-blue">
+<div class="app-container">
+    <div class="row content-container">
+        <div th:insert="~{adminpub::topbar}">
+
+        </div>
+        <div th:insert="~{adminpub::sidebar(active='adminwarehouselist.html')}">
+
+        </div>
+        <div class="container-fluid">
+            <div class="side-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <div class="title">仓库列表</div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <table class="datatable table table-striped" cellspacing="0" width="100%">
+                                    <thead>
+                                    <tr>
+                                        <th>编号</th>
+                                        <th>名字</th>
+                                        <th>账号</th>
+                                        <th>密码</th>
+                                        <th>联系方式</th>
+                                        <th>地址</th>
+                                        <th>城市</th>
+                                    </tr>
+                                    </thead>
+                                    <tfoot>
+                                    <tr>
+                                        <th>编号</th>
+                                        <th>名字</th>
+                                        <th>账号</th>
+                                        <th>密码</th>
+                                        <th>联系方式</th>
+                                        <th>地址</th>
+                                        <th>城市</th>
+                                    </tr>
+                                    </tfoot>
+                                    <tbody>
+                                    <tr th:each="user:${users}">
+                                        <td th:text="${user.getUid()}"></td>
+                                        <td th:text="${user.getUname()}"></td>
+                                        <td th:text="${user.getUusername()}"></td>
+                                        <td th:text="${user.getUpassword()}"></td>
+                                        <td th:text="${user.getUphone()}"></td>
+                                        <td th:text="${user.getUaddress()}"></td>
+                                        <td th:text="${user.getUcity()}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

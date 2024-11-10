@@ -1,0 +1,22 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /warehouse
+
+spring:
+  application:
+    name: user-service
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/graduation_306_warehouse?@characterEncoding=utf-8
+    username: root
+    password: 123456
+  mvc:
+    view:
+      prefix: classpath:/templates/
+      suffix: .html
+
+mybatis:
+  mapper-locations: classpath:/com/pan/warehouse/mapper/*.xml
+  type-aliases-package: com.pan.warehouse.pojo
+

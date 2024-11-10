@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/font-awesome.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/animate.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/bootstrap-switch.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/checkbox3.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/jquery.dataTables.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/dataTables.bootstrap.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/select2.min.css}">
+    <!-- CSS App -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/themes/flat-blue.css}">
+    <!-- Javascript Libs -->
+    <script type="text/javascript" th:src="@{/lib/js/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/Chart.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/bootstrap-switch.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/jquery.matchHeight-min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/jquery.dataTables.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/dataTables.bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/select2.full.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/ace/ace.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/ace/mode-html.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/ace/theme-github.js}"></script>
+    <!-- Javascript -->
+    <script type="text/javascript" th:src="@{/js/app.js}"></script>
+    <script type="text/javascript" th:src="@{/js/index.js}"></script>
+</head>
+<body class="flat-blue">
+<div class="app-container">
+    <div class="row content-container">
+        <!-- 顶部导航 -->
+        <nav class="navbar navbar-default navbar-fixed-top navbar-top" th:fragment="topbar">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-expand-toggle">
+                        <i class="fa fa-bars icon"></i>
+                    </button>
+                    <ol class="breadcrumb navbar-breadcrumb">
+                        <li class="active">仓库操作界面</li>
+                    </ol>
+                    <button type="button" class="navbar-right-expand-toggle pull-right visible-xs">
+                        <i class="fa fa-th icon"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <!-- 侧边栏 -->
+        <div class="side-menu sidebar-inverse" th:fragment="sidebar">
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="side-menu-container">
+                    <!--标签-->
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">
+                            <div class="icon fa fa-paper-plane"></div>
+                            <div class="title">库存管理系统</div>
+                        </a>
+                        <button type="button" class="navbar-expand-toggle pull-right visible-xs">
+                            <i class="fa fa-times icon"></i>
+                        </button>
+                    </div>
+                    <!--一级列表-->
+                    <ul class="nav navbar-nav">
+                        <li th:class="${active=='user.html'?'active':''}">
+                            <a th:href="@{/user/index}">
+                                <span class="icon fa fa-tachometer"></span><span class="title">首页</span>
+                            </a>
+                        </li>
+                        <!--仓库-->
+                        <li th:class="${active=='userinfo.html'?'active':''}">
+                            <a th:href="@{/user/info}">
+                                <span class="icon fa fa-desktop"></span><span class="title">个人信息</span>
+                            </a>
+                        </li>
+                        <li class="panel panel-default dropdown">
+                            <a data-toggle="collapse" href="#dropdown-table">
+                                <span class="icon fa fa-table"></span><span class="title">货架管理</span>
+                            </a>
+                            <!-- Dropdown level 1 -->
+                            <div id="dropdown-table" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul class="nav navbar-nav">
+                                        <li th:class="${active=='usershelvelist.html'?'active':''}"><a th:href="@{/user/shelvelist}">查看货架</a>
+                                        </li>
+                                        <li th:class="${active=='useraddshelve.html'?'active':''}"><a th:href="@{/user/addshelve}">增加货架</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="panel panel-default dropdown">
+                            <a data-toggle="collapse" href="#dropdown-form">
+                                <span class="icon fa fa-file-text-o"></span><span class="title">货物管理</span>
+                            </a>
+                            <!-- Dropdown level 1 -->
+                            <div id="dropdown-form" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul class="nav navbar-nav">
+                                        <li th:class="${active=='useraddproductstorage.html'?'active':''}"><a th:href="@{/user/productstoragepage}">货物入库记录</a>
+                                        </li>
+                                        <li th:class="${active=='userproductstoragelist.html'?'active':''}"><a th:href="@{/user/productstoragelist}">查看货物入库记录</a>
+                                        </li>
+                                        <li th:class="${active=='userputgood.html'?'active':''}"><a th:href="@{/user/putgoodpage}">货物处理</a>
+                                        </li>
+                                        <li th:class="${active=='userputgoodremeberlist.html'?'active':''}"><a th:href="@{/user/putgoodremeberlist}">查看货物操作记录</a>
+                                        </li>
+                                        <li th:class="${active=='userputgoodbadtimelist.html'?'active':''}"><a th:href="@{/user/putgoodbadtimelist}">查看货物过期情况</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+
+                        <!-- Dropdown-->
+                        <li class="panel panel-default dropdown">
+                            <a data-toggle="collapse" href="#component-example">
+                                <span class="icon fa fa-cubes"></span><span class="title">调拨管理</span>
+                            </a>
+                            <!-- Dropdown level 1 -->
+                            <div id="component-example" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul class="nav navbar-nav">
+                                        <li th:class="${active=='userapplygood.html'?'active':''}"><a th:href="@{/user/applygoodpage}">调拨申请</a>
+                                        </li>
+                                        <li th:class="${active=='userapplygoodlist.html'?'active':''}"><a th:href="@{/user/applygoodlist}">调拨申请记录</a>
+                                        </li>
+                                        <li th:class="${active=='userallocationlist.html'?'active':''}"><a th:href="@{/user/allocationlist}">调拨要求列表</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- Dropdown-->
+                        <li class="panel panel-default dropdown">
+                            <a data-toggle="collapse" href="#dropdown-icon">
+                                <span class="icon fa fa-archive"></span><span class="title">发货管理</span>
+                            </a>
+                            <!-- Dropdown level 1 -->
+                            <div id="dropdown-icon" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul class="nav navbar-nav">
+                                        <li th:class="${active=='userorderlist.html'?'active':''}"><a th:href="@{/user/orderlist}">查看订单</a>
+                                        </li>
+                                        <li th:class="${active=='useraddorderto.html'?'active':''}"><a th:href="@{/user/addordertopage}">发货处理</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </nav>
+        </div>
+        <!-- Main Content -->
+        <div class="container-fluid" id="main_content">
+            <div class="side-body padding-top">
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

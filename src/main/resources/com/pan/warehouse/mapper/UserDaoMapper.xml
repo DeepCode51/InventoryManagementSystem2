@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pan.warehouse.dao.UserDao">
+    <select id="login" resultType="User">
+        select * from `user` where uusername=#{username} and upassword=#{password} ;
+    </select>
+    <select id="findUserById" resultType="User">
+        select * from `user`
+        where uid=#{id}
+    </select>
+    <update id="updateUser">
+        update `user` set upassword=#{password},uphone=#{phone}
+        where uid=#{id}
+    </update>
+    <select id="shelveList" resultType="Shelve">
+        select * from `shelve`
+        where uid=#{id}
+    </select>
+    <select id="shelveSum" resultType="java.lang.Integer">
+        select count(*) from `shelve`
+        where uid=#{id}
+    </select>
+    <insert id="addShelve" >
+        insert into `shelve`
+        values (#{sid},'空闲',#{uid})
+    </insert>
+    <select id="findShelveById" resultType="Shelve">
+        select * from `shelve`
+        where sid=#{sid}
+    </select>
+    <update id="updateShelve" >
+        update `shelve` set sstate='空闲'
+        where sid=#{sid}
+    </update>
+    <delete id="deleteShelvePutGood">
+        delete from `goodput`
+        where sid=#{sid}
+    </delete>
+    <insert id="adddeleteputgoodremeber">
+        insert into `goodputremeber`(gptid,sid,putstate) values (#{gptid},#{sid},'置空');
+    </insert>
+    <update id="updatedeleteputgoodremeber">
+        update `goodputremeber` set psid= (select gp.psid from `goodput` gp where sid=#{sid} )
+        where sid=#{sid} and gptid=#{gptid};
+
+    </update>
+    <update id="updatedeleteputgoodremeberAmount">
+        update `goodputremeber` set amount= (select gp.amount from `goodput` gp where sid=#{sid} )
+        where sid=#{sid} and gptid=#{gptid};
+    </update>
+    <select id="goodInfoList" resultType="goodInfo">
+        select g.gid,g.gname,f.fname from `good` g join `factory` f on g.fid=f.fid
+    </select>
+    <insert id="addproductstorage">
+        insert into `productstorage` values (#{psid},#{gid},#{uid},#{amount},NOW(),#{badtime})
+    </insert>
+    <select id="productstorageSum" resultType="java.lang.Integer">
+        select count(*) from  `productstorage`
+    </select>
+    <select id="prodList" resultType="Productstorage">
+        select p.psid,g.gname,p.amount,p.accesstime,p.badtime from `good` g join `productstorage` p on p.gid=g.gid
+        where p.uid=#{uid}
+    </select>
+    <select id="productstorageSumById" resultType="java.lang.Integer">
+        select count(*) from  `productstorage`
+        where uid=#{uid}
+    </select>
+    <insert id="addputgood">
+        insert into `goodput` values (#{psid},#{sid},#{amount});
+    </insert>
+    <insert id="addputgoodremeber">
+        insert into `goodputremeber` values (#{gptid},#{psid},#{sid},#{amount},'放入')
+    </insert>
+    <select id="gptSum" resultType="java.lang.Integer">
+        select count(*) from `goodputremeber`
+    </select>
+    <update id="updateshelvestate">
+        update `shelve` set sstate='非空'
+        where sid=#{sid}
+    </update>
+    <select id="pgs" resultType="putGoodInfo">
+        select s.sid,ps.psid,s.sstate,g.gid,g.gname,gp.amount from `shelve` s left join `goodput` gp on s.sid=gp.sid left join `productstorage` ps on ps.psid=gp.psid  left join `good` g on g.gid=ps.gid
+        where s.uid=#{uid}
+    </select>
+    <select id="findPsById" resultType="goodPut">
+        select * from `goodput` where sid=#{sid}
+    </select>
+    <insert id="addtakegoodremeber">
+        insert into `goodputremeber` values (#{gptid},#{psid},#{sid},#{amount},'取出')
+    </insert>
+    <select id="findAmountById" resultType="java.lang.Integer">
+        select amount from `goodput`
+        where sid=#{sid}
+    </select>
+    <update id="updateShelvePutGood">
+        update `goodput` set amount=#{amount}
+        where sid=#{sid}
+    </update>
+    <select id="pgts" resultType="putGoodRemeber">
+        select * from `goodputremeber`
+        where sid in (select sid from `shelve` where uid=#{uid})
+    </select>
+    <select id="psBadList" resultType="Productstorage">
+        SELECT DISTINCT p.psid,p.gid,p.amount,p.accesstime,p.badtime from `productstorage` p join `goodput` g on p.psid=g.psid where NOW()>  DATE_SUB(badtime,INTERVAL 1 MONTH)
+        and uid=#{uid}
+    </select>
+    <select id="applygoodSum" resultType="java.lang.Integer">
+        select count(*) from `applygood`
+    </select>
+    <insert id="applygood">
+        insert into `applygood` values (#{appid},#{fromid},#{gid},#{amount},#{needtime},'未审核')
+    </insert>
+    <select id="appList" resultType="Applygood">
+        select * from `applygood`
+        where fromid=#{fromid}
+    </select>
+    <select id="orderList" resultType="orderinfo">
+        select o.oid,u.uname,o.receivecity,o.otime,g.gname,o.amount from `order` o join `good` g on o.gid=g.gid join `user` u on u.uid=o.uid
+        where u.uid=#{uid} and o.state='未发货';
+    </select>
+    <select id="orderListByGid" resultType="orderinfo">
+        select o.oid,u.uname,o.receivecity,o.otime,g.gname,o.amount from `order` o join `good` g on o.gid=g.gid join `user` u on u.uid=o.uid
+        where u.uid=#{uid} and o.state='未发货' and g.gid=#{gid};
+    </select>
+    <select id="findOrderById" resultType="Order">
+        select o.oid,u.uid,o.receivecity,o.otime,g.gid,o.amount from `order` o join `good` g on o.gid=g.gid join `user` u on u.uid=o.uid
+        where o.oid=#{oid};
+    </select>
+    <insert id="addorderremeber">
+        insert into `goodputremeber` values (#{gptid},#{psid},#{sid},#{amount},'发货')
+    </insert>
+    <insert id="addallocationremeber">
+        insert into `goodputremeber` values (#{gptid},#{psid},#{sid},#{amount},'调拨')
+    </insert>
+    <insert id="addorderto">
+        insert into `orderto` values (#{oid},#{psid})
+    </insert>
+    <update id="updateorderstate">
+        update `order` set state='已发货'
+        where oid=#{oid}
+    </update>
+    <select id="allocationSum" resultType="java.lang.Integer">
+        select count(*) from `allocation`
+        where fromid=#{uid} and state='待审核'
+    </select>
+    <select id="orderSum" resultType="java.lang.Integer">
+        select count(*) from `order`
+        where uid=#{uid} and state='未发货'
+    </select>
+    <select id="allList" resultType="Allocation">
+        select * from `allocation`
+        where fromid=#{uid} and state='待审核'
+    </select>
+    <select id="findAllocationById" resultType="Allocation">
+        select * from `allocation`
+        where alid=#{alid}
+    </select>
+    <update id="updateallocationstate" >
+        update `allocation` set state='同意'
+        where alid=#{alid}
+    </update>
+    <select id="findShelveState" resultType="java.lang.Integer">
+        select count(*) from `shelve`
+        where uid=#{uid} and sstate=#{state}
+    </select>
+    <select id="findSumByMonth" resultType="java.lang.Integer">
+        select IFNULL(sum(amount),0) from `productstorage`
+        where uid=#{uid} and PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format(accesstime, '%Y%m' ) ) =#{time}
+    </select>
+</mapper>

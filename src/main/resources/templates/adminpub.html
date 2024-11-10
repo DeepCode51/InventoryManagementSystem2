@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/font-awesome.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/animate.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/bootstrap-switch.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/checkbox3.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/jquery.dataTables.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/dataTables.bootstrap.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/select2.min.css}">
+    <!-- CSS App -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/themes/flat-blue.css}">
+    <!-- Javascript Libs -->
+    <script type="text/javascript" th:src="@{/lib/js/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/Chart.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/bootstrap-switch.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/jquery.matchHeight-min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/jquery.dataTables.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/dataTables.bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/select2.full.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/ace/ace.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/ace/mode-html.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/js/ace/theme-github.js}"></script>
+    <!-- Javascript -->
+    <script type="text/javascript" th:src="@{/js/app.js}"></script>
+    <script type="text/javascript" th:src="@{/js/index.js}"></script>
+</head>
+<body class="flat-blue">
+<div class="app-container">
+    <div class="row content-container">
+        <!-- 顶部导航 -->
+        <nav class="navbar navbar-default navbar-fixed-top navbar-top" th:fragment="topbar">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-expand-toggle">
+                        <i class="fa fa-bars icon"></i>
+                    </button>
+                    <ol class="breadcrumb navbar-breadcrumb">
+                        <li class="active">管理员界面</li>
+                    </ol>
+                    <button type="button" class="navbar-right-expand-toggle pull-right visible-xs">
+                        <i class="fa fa-th icon"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <!-- 侧边栏 -->
+        <div class="side-menu sidebar-inverse" th:fragment="sidebar">
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="side-menu-container">
+                    <!--logo-->
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">
+                            <div class="icon fa fa-paper-plane"></div>
+                            <div class="title">库存管理系统</div>
+                        </a>
+                        <button type="button" class="navbar-expand-toggle pull-right visible-xs">
+                            <i class="fa fa-times icon"></i>
+                        </button>
+                    </div>
+                    <!--一级列表-->
+                    <ul class="nav navbar-nav">
+                        <li th:class="${active=='admin.html'?'active':''}">
+                            <a th:href="@{/admin/index}">
+                                <span class="icon fa fa-tachometer"></span><span class="title">首页</span>
+                            </a>
+                        </li>
+                        <!--仓库-->
+                        <li class="panel panel-default dropdown">
+                            <a data-toggle="collapse" href="#dropdown-element">
+                                <span class="icon fa fa-desktop"></span><span class="title">仓库管理</span>
+                            </a>
+                            <!-- Dropdown level 1 -->
+                            <div id="dropdown-element" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul class="nav navbar-nav">
+                                        <li th:class="${active=='adminhouse.html'?'active':''}"><a th:href="@{/admin/house}">个人信息</a>
+                                        </li>
+                                        <li th:class="${active=='adminwarehouselist.html'?'active':''}"><a th:href="@{/admin/warehouselist}">查看分仓库</a>
+                                        </li>
+                                        <li th:class="${active=='adminaddwarehouse.html'?'active':''}"><a th:href="@{/admin/addwarehouse}">增加仓库</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                        <!--货物-->
+                        <li class="panel panel-default dropdown">
+                            <a data-toggle="collapse" href="#dropdown-table">
+                                <span class="icon fa fa-table"></span><span class="title">货物管理</span>
+                            </a>
+                            <!-- Dropdown level 1 -->
+                            <div id="dropdown-table" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul class="nav navbar-nav">
+                                        <li th:class="${active=='admingoodlist.html'?'active':''}"><a th:href="@{/admin/goodlist}">查看货物</a>
+                                        </li>
+                                        <li th:class="${active=='adminaddgood.html'?'active':''}"><a th:href="@{/admin/addgoodpage}">增加货物</a>
+                                        </li>
+                                        <li th:class="${active=='admingoodputlist.html'?'active':''}"><a th:href="@{/admin/goodputlist}">查看货物存货</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                        <!--标签-->
+                        <li class="panel panel-default dropdown">
+                            <a data-toggle="collapse" href="#dropdown-tag">
+                                <span class="icon fa fa-tags"></span><span class="title">标签管理</span>
+                            </a>
+                            <!-- Dropdown level 1 -->
+                            <div id="dropdown-tag" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul class="nav navbar-nav">
+                                        <li th:class="${active=='adminticketlist.html'?'active':''}"><a th:href="@{/admin/ticketlist}">标签列表</a>
+                                        </li>
+                                        <li th:class="${active=='adminaddticket.html'?'active':''}"><a th:href="@{/admin/addticketpage}">增加标签</a>
+                                        </li>
+                                        <li th:class="${active=='adminticketgoodlist.html'?'active':''}"><a th:href="@{/admin/ticketgoodlistpage}">货物标签查看</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                        <!--生产-->
+                        <li class="panel panel-default dropdown">
+                            <a data-toggle="collapse" href="#dropdown-form">
+                                <span class="icon fa fa-file-text-o"></span><span class="title">生产订单管理</span>
+                            </a>
+                            <!-- Dropdown level 1 -->
+                            <div id="dropdown-form" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul class="nav navbar-nav">
+                                        <li th:class="${active=='adminaddfactory.html'?'active':''}"><a th:href="@{/admin/addfactorypage}">增加工厂</a>
+                                        </li>
+                                        <li th:class="${active=='adminproductionlist.html'?'active':''}"><a th:href="@{/admin/productionlist}">查看生产订单</a>
+                                        </li>
+                                        <li th:class="${active=='adminaddproduction.html'?'active':''}"><a th:href="@{/admin/addproductionpage}">发送生产订单</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+
+                        <!-- 调拨-->
+                        <li class="panel panel-default dropdown">
+                            <a data-toggle="collapse" href="#component-example">
+                                <span class="icon fa fa-cubes"></span><span class="title">调拨管理</span>
+                            </a>
+                            <!-- Dropdown level 1 -->
+                            <div id="component-example" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul class="nav navbar-nav">
+                                        <li th:class="${active=='adminapplygoodlist.html'?'active':''}"><a th:href="@{/admin/applygoodlist}">查看调拨申请</a>
+                                        </li>
+                                        <li th:class="${active=='adminaddallocation.html'?'active':''}"><a th:href="@{/admin/addallocationpage}">增加调拨</a>
+                                        </li>
+                                        <li th:class="${active=='adminallocationlist.html'?'active':''}"><a th:href="@{/admin/allocationlist}">调拨列表</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- 物流-->
+                        <li class="panel panel-default dropdown">
+                            <a data-toggle="collapse" href="#dropdown-example">
+                                <span class="icon fa fa-slack"></span><span class="title">物流管理</span>
+                            </a>
+                            <!-- Dropdown level 1 -->
+                            <div id="dropdown-example" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul class="nav navbar-nav">
+                                        <li th:class="${active=='admintransportlist.html'?'active':''}"><a th:href="@{/admin/transportlist}">查看物流</a>
+                                        </li>
+                                        <li th:class="${active=='adminaddtransport.html'?'active':''}"><a th:href="@{/admin/addtransportpage}">增加物流</a>
+                                        </li>
+                                        <li th:class="${active=='admincitytocitylist.html'?'active':''}"><a th:href="@{/admin/citytocitylist}">查看城市距离</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- 商品订单-->
+                        <li class="panel panel-default dropdown">
+                            <a data-toggle="collapse" href="#dropdown-icon">
+                                <span class="icon fa fa-archive"></span><span class="title">商品订单管理</span>
+                            </a>
+                            <!-- Dropdown level 1 -->
+                            <div id="dropdown-icon" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul class="nav navbar-nav">
+                                        <li th:class="${active=='adminaddorder.html'?'active':''}"><a th:href="@{/admin/addorderpage}">增加订单</a>
+                                        </li>
+                                        <li th:class="${active=='adminorderlist.html'?'active':''}"><a th:href="@{/admin/orderlist}">查看订单</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </nav>
+        </div>
+        <!-- Main Content -->
+        <div class="container-fluid" id="main_content">
+            <div class="side-body padding-top">
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

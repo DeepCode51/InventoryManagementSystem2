@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pan.warehouse.dao.AdminDao">
+    <select id="login" resultType="Admin">
+        select * from `admin`
+        where ausername=#{username} and apassword=#{password}
+    </select>
+    <select id="findAdminById" resultType="Admin">
+        select * from `admin`
+        where aid=#{id}
+    </select>
+    <update id="updateAdmin">
+        update `admin` set apassword=#{password},aphone=#{phone}
+        where aid=#{id}
+    </update>
+    <select id="userSum" resultType="java.lang.Integer">
+        select count(*) from `user`
+    </select>
+    <select id="userList" resultType="User">
+        select * from `user`
+    </select>
+    <insert id="addWarehouse">
+        insert  into `user`
+        values(#{id}, #{name}, #{username}, #{password}, #{phone}, #{address}, #{city})
+    </insert>
+    <select id="findUserByUsername" resultType="User">
+        select * from `user`
+        where uusername=#{username}
+    </select>
+    <select id="goodInfoList" resultType="goodInfo">
+        select g.gid,g.gname,f.fname from `good` g join `factory` f on g.fid=f.fid
+    </select>
+    <select id="factoryList" resultType="Factory">
+        select * from `factory`
+    </select>
+    <select id="goodSum" resultType="java.lang.Integer">
+        select count(*) from  `good`
+    </select>
+    <insert id="addGood">
+        insert into `good` values (#{gid},#{gname},#{fid})
+    </insert>
+    <select id="findGoodById" resultType="goodInfo">
+        select g.gid,g.gname,f.fname from `good` g join `factory` f on g.fid=f.fid
+        where g.gid=#{gid}
+    </select>
+    <update id="updateGoodById" >
+        update `good` set gname=#{gname}
+        where gid=#{gid}
+    </update>
+    <select id="ticketList" resultType="Ticket">
+        select * from `ticket`
+    </select>
+    <select id="ticketSum" resultType="java.lang.Integer">
+        select count(*) from `ticket`
+    </select>
+    <insert id="addticket" >
+        insert into `ticket` values (#{tid},#{tname})
+    </insert>
+    <select id="findTicketByName" resultType="Ticket">
+        select * from `ticket`
+        where tname=#{tname}
+    </select>
+    <select id="ticketGoodList" resultType="ticketGood">
+        select gt.tid,t.tname,g.gname,f.fname from `ticket` t join `goodandticket` gt on gt.tid=t.tid join `good` g on g.gid=gt.gid join `factory` f on f.fid=g.fid
+        where gt.tid=#{tid}
+    </select>
+    <select id="ticketListByGood" resultType="Ticket">
+        SELECT * from `ticket`
+        WHERE tid not in
+        (SELECT t.tid  from `ticket` t JOIN `goodandticket` gt WHERE t.tid=gt.tid AND gt.gid=#{gid})
+    </select>
+    <insert id="addgoodticket">
+        insert into `goodandticket` values (#{tid},#{gid})
+    </insert>
+    <insert id="addfactory">
+        insert into `factory` values (#{fid},#{fname},#{faddress},#{fphone})
+    </insert>
+    <select id="factorySum" resultType="java.lang.Integer">
+        select count(*) from `factory`
+    </select>
+    <select id="proList" resultType="productionInfo">
+        select p.pid,g.gid,g.gname,p.amount from `production` p join `good` g on p.gid=g.gid
+    </select>
+    <select id="regList" resultType="regularorderInfo">
+        select r.rid,g.gname,r.amount,r.ntime,r.rtime,r.rnumber from `regularorder` r join `good` g on r.gid=g.gid
+    </select>
+    <select id="productionSum" resultType="java.lang.Integer">
+        select count(*) from `production`
+    </select>
+    <select id="regularorderSum" resultType="java.lang.Integer">
+        select count(*) from `regularorder`
+    </select>
+    <insert id="addproduction">
+        insert into `production` values (#{pid},#{gid},#{amount})
+    </insert>
+    <insert id="addregularorder">
+        insert into `regularorder` values (#{rid},#{gid},#{amount},NOW(),#{rtime},#{rnumber})
+    </insert>
+    <select id="gpis" resultType="adminGoodPutInfo">
+        select  g.gid,g.gname,u.uid,u.uname,f.fid,f.fname,sum(gp.amount) amount from `goodput` gp JOIN `shelve` s on s.sid=gp.sid
+                                                                                           JOIN `productstorage` ps on ps.psid=gp.psid
+                                                                                           JOIN `good` g on g.gid=ps.gid
+                                                                                           JOIN `user` u on u.uid=s.uid
+                                                                                           join `factory` f on f.fid=g.fid
+        GROUP BY u.uid,g.gid
+    </select>
+    <select id="appList" resultType="Applygood">
+        select * from `applygood`
+        where state='未审核'
+    </select>
+    <update id="accessapplygood">
+        update `applygood` set state='已通过'
+        where appid=#{appid}
+    </update>
+    <update id="refuseapplygood">
+        update `applygood` set state='未通过'
+        where appid=#{appid}
+    </update>
+
+    <select id="transportList" resultType="Transport">
+        select * from `transport` where state='存在'
+    </select>
+    <insert id="addtransport">
+        insert into `transport` values (#{tsid},#{fromid},#{toid},#{tname},#{needtime},#{speed},'存在')
+    </insert>
+    <select id="transportSum" resultType="java.lang.Integer">
+        select count(*) from `transport`
+    </select>
+    <select id="findTransportById" resultType="Transport">
+        select * from `transport`
+        where tsid=#{tsid}
+    </select>
+    <update id="deletetransport">
+        update  `transport` set state='删除'
+        where tsid=#{tsid}
+    </update>
+    <update id="updatetransport">
+        update `transport` set fromid=#{fromid},toid=#{toid},tname=#{tname},needtime=#{needtime},speed=#{speed}
+        where tsid=#{tsid}
+    </update>
+    <select id="ccList" resultType="Citytocity">
+        select * from `citytocity`
+    </select>
+    <select id="orderSum" resultType="java.lang.Integer">
+        select count(*) from `order`
+    </select>
+    <select id="userInfoList" resultType="userInfo">
+        select u.uid,c.distance from `citytocity` c join `user` u on u.ucity=c.fromcity
+        where c.tocity=#{receivecity}
+    </select>
+    <insert id="addorder">
+        insert into `order` values (#{oid},#{uid},#{receivecity},now(),#{gid},#{amount},'未发货')
+    </insert>
+    <select id="orderinfoList" resultType="orderinfo">
+        select o.oid,u.uname,o.receivecity,o.otime,g.gname,o.amount,o.state from `order` o join `good` g on o.gid=g.gid join `user` u on u.uid=o.uid
+    </select>
+    <select id="findAmountByUidAndGid" resultType="java.lang.Integer">
+        select  sum(gp.amount)
+        from `goodput` gp JOIN `shelve` s on s.sid=gp.sid
+                          JOIN `productstorage` ps on ps.psid=gp.psid
+                          JOIN `good` g on g.gid=ps.gid
+                          JOIN `user` u on u.uid=s.uid
+                          join `factory` f on f.fid=g.fid
+        where g.gid=#{gid} and u.uid=#{uid}
+        GROUP BY u.uid,g.gid
+    </select>
+    <select id="findTransport" resultType="Transport">
+        SELECT t.tsid,t.tname,t.fromid,t.toid,t.needtime,t.speed
+        from `transport` t join `user` u on u.uid=t.fromid
+                           join (select  g.gid,g.gname,u.uid,u.uname,f.fid,f.fname,sum(gp.amount) amount from `goodput` gp JOIN `shelve` s on s.sid=gp.sid
+                                                                                                                           JOIN `productstorage` ps on ps.psid=gp.psid
+                                                                                                                           JOIN `good` g on g.gid=ps.gid
+                                                                                                                           JOIN `user` u on u.uid=s.uid
+                                                                                                                           join `factory` f on f.fid=g.fid
+                                 GROUP BY u.uid,g.gid) s1 on s1.uid=u.uid
+        where s1.gid=#{gid} and s1.amount &gt;= #{amount} and t.toid=#{toid} and t.needtime &lt;= #{needtime} and t.state='存在';
+    </select>
+    <insert id="addallocation">
+        insert into `allocation` values (#{alid},#{fromid},#{toid},#{tsid},'待审核',#{gid},#{amount})
+    </insert>
+    <select id="allocationList" resultType="Allocation">
+        select * from `allocation`
+    </select>
+    <select id="allocationSum" resultType="java.lang.Integer">
+        select count(*) from `allocation`
+    </select>
+    <select id="allocationsum" resultType="java.lang.Integer">
+        select count(*) from `applygood`
+        where state='未审核'
+    </select>
+</mapper>
